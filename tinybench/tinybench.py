@@ -3,29 +3,48 @@ import statistics
 from scipy import stats
 
 class tinybench():
-    def __init__(self):
-        pass
+    def __init__(self, exec_times):
+        self.exec_times = exec_times
+        self.means = {}
+        self.maxs = {}
+        self.mins = {}
+        self.meds = {}
+        for label, times in exec_times.items():
+            self.means[label] = statistics.mean(exec_times[label])
+            self.maxs[label] = max(exec_times[label])
+            self.mins[label] = min(exec_times[label])
+            self.meds[label] = statistics.median(exec_times[label])
+
+    def __str__(self):
+        final_str = ""
+        for label, times in self.exec_times.items():
+            final_str += label + ": mean: " + str(self.means[label]) + " max: " + str(self.maxs[label]) + " min: " + str(self.mins[label]) + " median: " + str(self.meds[label]) + "\n"
+
+        return final_str
 
 
 # { label : (fname, [args ...]) }
-def benchmark_dict(f_dict, ntimes, warmup):
-    exec_time = {}
-    f_means = {}
+def benchmark_dict(f_dict, ntimes, warmup, process_time = False):
+    exec_times = {}
+    
+    timer = time.time
+
+    if process_time:
+        timer = time.process_time
+
     for label, (fname, args) in f_dict.items():
         for n in range(warmup):
             fname(*args)
 
-        exec_time[label] = []
+        exec_times[label] = []
 
         for n in range(ntimes):
-            prev = time.time()
+            prev = timer()
             fname(*args)
-            after = time.time()
-            exec_time[label].append(after - prev)
+            after = timer()
+            exec_times[label].append(after - prev)
 
-        f_means[label] = statistics.mean(exec_time[label])
-
-    return f_means
+    return tinybench(exec_times)
 
 def foo(a, b):
     y = 0
@@ -39,15 +58,6 @@ def bar(a):
     for x in range(100000):
         z += 1
 
-mean_n = []
-mean_w = []
-for i in range(50):
-    f_means_n = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 0)
-    mean_n.append(f_means_n["foo"])
-    f_means_w = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 15)
-    mean_w.append(f_means_w["foo"])
-    print(i)
-
-t, prob = stats.ttest_ind(mean_n, mean_w)
-print(prob)
+bench = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 5, False)
+print(bench)
 

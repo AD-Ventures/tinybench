@@ -1,6 +1,7 @@
 import time
 import statistics
 import inspect
+import re
 
 class tinybench():
     def __init__(self, exec_times):
@@ -63,7 +64,7 @@ print(bench)
 
 
 def benchmark_parse(string):
-    strip_string  = string.stringtrip()
+    strip_string  = string.strip()
     label_ind = strip_string.find(":")
     label = string
     if label_ind != -1:
@@ -72,7 +73,7 @@ def benchmark_parse(string):
     func = strip_string[label_ind + 1:func_ind]
     new_string = strip_string[func_ind + 1:]
     new_string = new_string[:-1]
-    args = new_string.split(",")
+    args = map(str.strip, new_string.split(","))
     return (label, func, args)
 
 #https://stackoverflow.com/a/14694234
@@ -84,15 +85,49 @@ def calling_scope_variable(name):
       return None
   return frame.f_locals[name]
 
+def get_value(string):
+    if string == None:
+        return None
+
+    if string == "True" or string == "False":
+        return bool(string)
+
+    if (string[0] == '"' and string[-1] == '"') or (string[0] == "'" and string[-1] == "'"):
+        return string[1:len(string) - 1]
+
+    if string.isdigit():
+        return int(string)
+
+    if string.replace(".", "1").isdigit():
+        return float(string)
+
+    # add list, set, map, etc. tests
+
+    return None
+
 # ['label:func(args)', ...]
 def benchmark(functions, ntimes, warmup, process_time = False):
     f_dict = {}
 
     for func in functions:
         label, func, args = benchmark_parse(func)
-        f_dict[label] = (func, args)
+        processed_args = []
+        for arg in args:
+            processed_arg = calling_scope_variable(arg)
+            if processed_arg is not None:
+                processed_args.append(processed_arg)
+            else:
+                processed_args.append(get_value(arg))
+
+        f_dict[label] = (globals()[func], processed_args)
 
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
 
-a = benchmark(["foo:foo(5, 6)", "bar(3)"], 10, 2)
+def test_it():
+    x = 2
+    y = 7
+    z = 3
+    a = benchmark(["foo:foo(x, y)", "bar(z)"], 10, 2)
+    print(a)
 
+test_it()

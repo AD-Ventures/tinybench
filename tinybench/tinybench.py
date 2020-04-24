@@ -85,26 +85,6 @@ def calling_scope_variable(name):
       return None
   return frame.f_locals[name]
 
-def get_value(string):
-    if string == None:
-        return None
-
-    if string == "True" or string == "False":
-        return bool(string)
-
-    if (string[0] == '"' and string[-1] == '"') or (string[0] == "'" and string[-1] == "'"):
-        return string[1:len(string) - 1]
-
-    if string.isdigit():
-        return int(string)
-
-    if string.replace(".", "1").isdigit():
-        return float(string)
-
-    # add list, set, map, etc. tests
-
-    return None
-
 # ['label:func(args)', ...]
 def benchmark(functions, ntimes, warmup, process_time = False):
     f_dict = {}
@@ -117,7 +97,7 @@ def benchmark(functions, ntimes, warmup, process_time = False):
             if processed_arg is not None:
                 processed_args.append(processed_arg)
             else:
-                processed_args.append(get_value(arg))
+                processed_args.append(eval(arg))
 
         f_dict[label] = (globals()[func], processed_args)
 

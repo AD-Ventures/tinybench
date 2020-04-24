@@ -1,6 +1,6 @@
 import time
 import statistics
-from scipy import stats
+import inspect
 
 class tinybench():
     def __init__(self, exec_times):
@@ -60,4 +60,39 @@ def bar(a):
 
 bench = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 5, False)
 print(bench)
+
+
+def benchmark_parse(string):
+    strip_string  = string.stringtrip()
+    label_ind = strip_string.find(":")
+    label = string
+    if label_ind != -1:
+        label = strip_string[0:label_ind]
+    func_ind = strip_string.find('(')
+    func = strip_string[label_ind + 1:func_ind]
+    new_string = strip_string[func_ind + 1:]
+    new_string = new_string[:-1]
+    args = new_string.split(",")
+    return (label, func, args)
+
+#https://stackoverflow.com/a/14694234
+def calling_scope_variable(name):
+  frame = inspect.stack()[1][0]
+  while name not in frame.f_locals:
+    frame = frame.f_back
+    if frame is None:
+      return None
+  return frame.f_locals[name]
+
+# ['label:func(args)', ...]
+def benchmark(functions, ntimes, warmup, process_time = False):
+    f_dict = {}
+
+    for func in functions:
+        label, func, args = benchmark_parse(func)
+        f_dict[label] = (func, args)
+
+    return benchmark_dict(f_dict, ntimes, warmup, process_time)
+
+a = benchmark(["foo:foo(5, 6)", "bar(3)"], 10, 2)
 

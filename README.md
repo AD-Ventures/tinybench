@@ -6,7 +6,7 @@ Tinybench is a lightweight package to time and compare various functions.  This 
 
 ```bash
 pip install tinybench
-```https://cran.r-project.org/web/packages/microbenchmark/index.html
+```
 
 ## Usage
 

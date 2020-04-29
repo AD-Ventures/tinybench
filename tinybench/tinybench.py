@@ -87,6 +87,39 @@ def calling_scope_variable(name):
 
 # ['label:func(args)', ...]
 def benchmark(functions, ntimes, warmup, process_time = False):
+    """
+    Benchmarks functions supplied in the first argument.
+
+    This function provides support for timing and comparing runtimes of various supplied functions.
+
+    Paramters
+    ---------
+    functions : list of str
+        List of strings with strings follown the format of 'label:func(args)'
+    ntimes : int
+        the number of times to run each function
+    warmup : int
+        the number of inital runs to throw out before calculating runtimes
+    pocess_time : bool, default False
+        whether to return process time or elapsed (real) runtimes
+
+    Retruns
+    -------
+    benchmark
+        an object of class benchmark
+
+    See Also
+    --------
+    
+    Examples
+    --------
+    >>> b = 
+    >>> print(b)
+    output of b
+
+    >>> b.plot()
+    <matplotlib.axes._subplots.AxesSuplot at ...?
+    """
     f_dict = {}
 
     for func in functions:

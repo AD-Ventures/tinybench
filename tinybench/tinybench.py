@@ -2,6 +2,7 @@ import time
 import statistics
 import inspect
 import re
+import matplotlib.pyplot as plt
 
 class tinybench():
     def __init__(self, exec_times):
@@ -23,6 +24,20 @@ class tinybench():
 
         return final_str
 
+
+    def plot(self):
+        units = "seconds"
+        labels = list(self.exec_times.keys())
+        data = list(self.exec_times.values())
+        fig, ax = plt.subplots()
+
+        ax.violinplot(data, vert = False)
+        ax.set_yticks(range(1, len(labels) + 1))
+        ax.set_yticklabels(labels)
+        ax.set_xlabel("Time in {}".format(units))
+        ax.set_title("Violin Plot of Runtimes")
+        plt.tight_layout() #so labels are not cutoff
+        plt.show()
 
 # { label : (fname, [args ...]) }
 def benchmark_dict(f_dict, ntimes, warmup, process_time = False):
@@ -61,7 +76,7 @@ def bar(a):
 
 bench = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 5, False)
 print(bench)
-
+bench.plot()
 
 def benchmark_parse(string):
     strip_string  = string.strip()

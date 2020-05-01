@@ -1,8 +1,8 @@
 import time
 import statistics
 import inspect
-import re
 import matplotlib.pyplot as plt
+
 
 class tinybench():
     def __init__(self, exec_times):
@@ -20,10 +20,12 @@ class tinybench():
     def __str__(self):
         final_str = ""
         for label, times in self.exec_times.items():
-            final_str += label + ": mean: " + str(self.means[label]) + " max: " + str(self.maxs[label]) + " min: " + str(self.mins[label]) + " median: " + str(self.meds[label]) + "\n"
+            final_str += label + ": mean: " + str(self.means[label]) +\
+                " max: " + str(self.maxs[label]) + " min: " +\
+                str(self.mins[label]) + " median: " + str(self.meds[label]) +\
+                "\n"
 
         return final_str
-
 
     def plot(self):
         units = "seconds"
@@ -31,18 +33,19 @@ class tinybench():
         data = list(self.exec_times.values())
         fig, ax = plt.subplots()
 
-        ax.violinplot(data, vert = False)
+        ax.violinplot(data, vert=False)
         ax.set_yticks(range(1, len(labels) + 1))
         ax.set_yticklabels(labels)
         ax.set_xlabel("Time in {}".format(units))
         ax.set_title("Violin Plot of Runtimes")
-        plt.tight_layout() #so labels are not cutoff
+        plt.tight_layout()  # so labels are not cutoff
         plt.show()
 
+
 # { label : (fname, [args ...]) }
-def benchmark_dict(f_dict, ntimes, warmup, process_time = False):
+def benchmark_dict(f_dict, ntimes, warmup, process_time=False):
     exec_times = {}
-    
+
     timer = time.time
 
     if process_time:
@@ -62,6 +65,7 @@ def benchmark_dict(f_dict, ntimes, warmup, process_time = False):
 
     return tinybench(exec_times)
 
+
 def foo(a, b):
     y = 0
     for x in range(100000):
@@ -69,17 +73,20 @@ def foo(a, b):
 
     return y
 
+
 def bar(a):
     z = 2
     for x in range(100000):
         z += 1
 
-bench = benchmark_dict({"foo" : (foo, [1, 2]), "bar" : (bar, [8])}, 100, 5, False)
+
+bench = benchmark_dict({"foo": (foo, [1, 2]), "bar": (bar, [8])}, 100, 5, False)
 print(bench)
 bench.plot()
 
+
 def benchmark_parse(string):
-    strip_string  = string.strip()
+    strip_string = string.strip()
     label_ind = strip_string.find(":")
     label = string
     if label_ind != -1:
@@ -91,21 +98,24 @@ def benchmark_parse(string):
     args = map(str.strip, new_string.split(","))
     return (label, func, args)
 
-#https://stackoverflow.com/a/14694234
+
+# https://stackoverflow.com/a/14694234
 def calling_scope_variable(name):
-  frame = inspect.stack()[1][0]
-  while name not in frame.f_locals:
-    frame = frame.f_back
-    if frame is None:
-      return None
-  return frame.f_locals[name]
+    frame = inspect.stack()[1][0]
+    while name not in frame.f_locals:
+        frame = frame.f_back
+        if frame is None:
+            return None
+    return frame.f_locals[name]
+
 
 # ['label:func(args)', ...]
-def benchmark(functions, ntimes, warmup, process_time = False):
+def benchmark(functions, ntimes, warmup, process_time=False):
     """
     Benchmarks functions supplied in the first argument.
 
-    This function provides support for timing and comparing runtimes of various supplied functions.
+    This function provides support for timing and comparing runtimes
+    of various supplied functions.
 
     Paramters
     ---------
@@ -125,10 +135,10 @@ def benchmark(functions, ntimes, warmup, process_time = False):
 
     See Also
     --------
-    
+
     Examples
     --------
-    >>> b = 
+    >>> b =
     >>> print(b)
     output of b
 
@@ -150,12 +160,3 @@ def benchmark(functions, ntimes, warmup, process_time = False):
         f_dict[label] = (globals()[func], processed_args)
 
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
-
-def test_it():
-    x = 2
-    y = 7
-    z = 3
-    a = benchmark(["foo:foo(x, y)", "bar(z)"], 10, 2)
-    print(a)
-
-test_it()

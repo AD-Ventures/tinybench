@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tinybench",
-    version="0.0.1",
+    version="1.0",
     author="Example Author",
     author_email="author@example.com",
     description="A microbenchmark for Python",

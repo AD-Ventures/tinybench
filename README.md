@@ -51,4 +51,4 @@ For any help or questions, please open an issue on GitHub.
 
 ## License
 
-[MIT](https://chosealicense.com/licenses/mit)
+[MIT](https://github.com/mickyabir/tinybench/blob/master/LICENSE)

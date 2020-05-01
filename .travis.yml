@@ -1,10 +1,14 @@
-language: python
-
-os:
-  - osx
-  - linux
-  - windows
-
+jobs:  
+  include:
+  - name: "Linux"
+    language: python
+    os: linux
+  - name: "MacOS"
+    language: shell
+    os: osx
+  - name: "Windows"
+    language: python
+    os: windows
 python:
   - "3.4"
   - "3.8"
@@ -12,7 +16,7 @@ python:
   - "pypy3"
 
 install:
-  pip install matplotlib
-  pip install .
+  pip3 install matplotlib
+  pip3 install .
 
 script: python3 tinybench/tests/test.py

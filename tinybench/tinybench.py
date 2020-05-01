@@ -106,7 +106,9 @@ def benchmark_parse(string):
     func = strip_string[label_ind + 1:func_ind]
     new_string = strip_string[func_ind + 1:]
     new_string = new_string[:-1]
-    args = map(str.strip, new_string.split(","))
+    args = list(map(str.strip, new_string.split(",")))
+    if args == ['']:
+        args = []
     return (label, func, args)
 
 
@@ -157,6 +159,8 @@ def benchmark(functs, ntimes, warmup, g, process_time=False):
         label, func, args = benchmark_parse(func)
         processed_args = []
         for arg in args:
+            if arg == '':
+                raise ValueError("Invalid empty argument")
             processed_arg = calling_scope_variable(arg)
             if processed_arg is not None:
                 processed_args.append(processed_arg)
@@ -191,7 +195,8 @@ def benchmark_env(functions):
     >>> print(env)
     {'foo': <function foo at 0x104bf49e0>}
     """
-
+    if type(functions) != list:
+        raise TypeError("Invalid list argument type 'functions'")
     env = {}
     for f in functions:
         env[f.__name__] = f

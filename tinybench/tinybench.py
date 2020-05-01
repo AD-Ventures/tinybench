@@ -17,6 +17,15 @@ class tinybench():
             self.mins[label] = min(exec_times[label])
             self.meds[label] = statistics.median(exec_times[label])
 
+        self.units = "us"
+        for t in self.maxs.values():
+            if t >= 0.01:
+                self.units = "s"
+                break
+
+            if t >= 0.00001:
+                self.units = "ms"
+
     def __str__(self):
         final_str = ""
         for label, times in self.exec_times.items():
@@ -28,9 +37,17 @@ class tinybench():
         return final_str
 
     def plot(self):
-        units = "seconds"
+        if self.units == "us":
+            units = "microseconds"
+            data = [[x * 1000000 for x in y] for y in list(self.exec_times.values())]
+        elif self.units == "ms":
+            units = "milliseconds"
+            data = [[x * 1000 for x in y] for y in list(self.exec_times.values())]
+        else:
+            units = "seconds"
+            data = list(self.exec_times.values())
+
         labels = list(self.exec_times.keys())
-        data = list(self.exec_times.values())
         fig, ax = plt.subplots()
 
         ax.violinplot(data, vert=False)
@@ -64,25 +81,6 @@ def benchmark_dict(f_dict, ntimes, warmup, process_time=False):
             exec_times[label].append(after - prev)
 
     return tinybench(exec_times)
-
-
-def foo(a, b):
-    y = 0
-    for x in range(100000):
-        y += a + b
-
-    return y
-
-
-def bar(a):
-    z = 2
-    for x in range(100000):
-        z += 1
-
-
-bench = benchmark_dict({"foo": (foo, [1, 2]), "bar": (bar, [8])}, 100, 5, False)
-print(bench)
-bench.plot()
 
 
 def benchmark_parse(string):
@@ -157,6 +155,27 @@ def benchmark(functions, ntimes, warmup, process_time=False):
             else:
                 processed_args.append(eval(arg))
 
+        print(globals())
         f_dict[label] = (globals()[func], processed_args)
 
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
+
+
+# def foo(a, b):
+#     y = 0
+#     for x in range(100000):
+#         y += a + b
+# 
+#     return y
+# 
+# 
+# def bar(a):
+#     z = 2
+#     for x in range(100000):
+#         z += 1
+# 
+# 
+# #bench = benchmark_dict({"foo": (foo, [1, 2]), "bar": (bar, [8])}, 100, 5, False)
+# bench = benchmark_dict({"foo": (foo, [1, 2]), "foo2": (foo, [1, 2])}, 500, 50, False)
+# bench.plot()
+# 

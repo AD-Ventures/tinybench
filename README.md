@@ -1,6 +1,6 @@
 # Tinybench
 
-Tinybench is a lightweight package to time and compare various functions.  This package was inspired by the R package [microbenchmark](https://cran.r-project.org/web/packages/microbenchmark/index.html)
+Tinybench is a lightweight package to time, compare, and visualize various functions.  This package was inspired by the R package [microbenchmark](https://cran.r-project.org/web/packages/microbenchmark/index.html)
 
 ## Installation
 
@@ -39,11 +39,15 @@ env = globals()
 b = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, env)
 print(b)
 b.plot()
+
+# alternatively, we can benchmark using the process time instead of real time:
+b_process = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, env, True)
+
 ```
 
 ## Support
 
-For any help or questions, please email ....
+For any help or questions, please open an issue on GitHub.
 
 ## License
 

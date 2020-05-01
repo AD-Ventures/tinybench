@@ -8,15 +8,17 @@ jobs:
       - "3.8"
       - "nightly"
       - "pypy3"
-    install:
+    before_install:
       pip3 install matplotlib
+    install:
       pip3 install .
   - name: "MacOS"
     language: shell
     os: osx
     osx_image: xcode11.2
-    install:
+    before_install:
       pip3 install matplotlib
+    install:
       pip3 install .
   - name: "Windows"
     language: shell
@@ -24,9 +26,9 @@ jobs:
     before_install:
       - choco install python --version 3.8.0
       - python -m pip install --upgrade pip
+      - pip3 install matplotlib
     env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
     install:
-      pip3 install matplotlib
       pip3 install .
 
 script: python3 tinybench/tests/test.py || python tinybench/tests/test.py

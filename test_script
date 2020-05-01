@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd tinybench/tests
-python test.py

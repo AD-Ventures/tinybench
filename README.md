@@ -1,4 +1,4 @@
-# Tinybench
+# Tinybench [![Build Status](https://travis-ci.com/mickyabir/tinybench.svg?token=WNzddxisBbCMp5mPWrna&branch=master)](https://travis-ci.com/mickyabir/tinybench)
 
 Tinybench is a lightweight package to time, compare, and visualize various functions.  This package was inspired by the R package [microbenchmark](https://cran.r-project.org/web/packages/microbenchmark/index.html)
 

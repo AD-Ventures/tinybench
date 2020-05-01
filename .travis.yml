@@ -1,10 +1,18 @@
 language: python
+
+os:
+  - osx
+  - linux
+  - windows
+
 python:
-  - "3.3"
+  - "3.4"
   - "3.8"
   - "nightly"
+  - "pypy3"
+
 install:
   pip install matplotlib
   pip install .
 
-script: test_script
+script: python3 tinybench/tests/test.py

@@ -4,6 +4,20 @@ import inspect
 import matplotlib.pyplot as plt
 
 class tinybench():
+    """
+    Benchmark with associated statistics and graphics.
+
+    ...
+
+    Methods
+    -------
+    __str__()
+        String representation of the benchmark data
+        
+    plot()
+        Creats and shows a violin plot for the benchmark data
+
+    """
     def __init__(self, exec_times):
         self.exec_times = exec_times
         self.means = {}
@@ -109,10 +123,10 @@ def calling_scope_variable(name):
 # ['label:func(args)', ...]
 def benchmark(functs, ntimes, warmup, g, process_time=False):
     """
-    Benchmarks functs supplied in the first argument.
+    Benchmarks functions supplied in the first argument.
 
     This function provides support for timing and comparing runtimes
-    of various supplied functs.
+    of various supplied functions.
 
     Paramters
     ---------
@@ -125,22 +139,17 @@ def benchmark(functs, ntimes, warmup, g, process_time=False):
     pocess_time : bool, default False
         whether to return process time or elapsed (real) runtimes
 
-    Retruns
+    Returns
     -------
     benchmark
         an object of class benchmark
 
-    See Also
-    --------
-
     Examples
     --------
-    >>> b =
+    >>> def foo(a, b): return a + b
+    >>> b = benchmark(["foo:foo(1, 2)"], 10, 3, globals())
     >>> print(b)
-    output of b
-
-    >>> b.plot()
-    <matplotlib.axes._subplots.AxesSuplot at ...?
+    foo: mean: 9.5367431640625e-08 max: 9.5367431640625e-07 min: 0.0 median: 0.0
     """
     f_dict = {}
 
@@ -159,26 +168,31 @@ def benchmark(functs, ntimes, warmup, g, process_time=False):
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
 
 def benchmark_env(functions):
+    """
+    Returns a map from function names to function symbols.
+
+    Use this in conjunction with benchmark if a fine-grained list
+    of functions is necessary.
+
+    Paramters
+    ---------
+    functions : list of function
+        The list of function symbols that will be used as a benhcmarking environment
+
+    Returns
+    -------
+    env
+        a map from function names to function symbols
+
+    Examples
+    --------
+    >>> def foo(): pass
+    >>> env = benchmark_env([foo])
+    >>> print(env)
+    {'foo': <function foo at 0x104bf49e0>}
+    """
+
     env = {}
     for f in functions:
         env[f.__name__] = f
     return env
-
-# def foo(a, b):
-#     y = 0
-#     for x in range(100000):
-#         y += a + b
-# 
-#     return y
-# 
-# 
-# def bar(a):
-#     z = 2
-#     for x in range(100000):
-#         z += 1
-# 
-# 
-# #bench = benchmark_dict({"foo": (foo, [1, 2]), "bar": (bar, [8])}, 100, 5, False)
-# bench = benchmark_dict({"foo": (foo, [1, 2]), "foo2": (foo, [1, 2])}, 500, 50, False)
-# bench.plot()
-# 

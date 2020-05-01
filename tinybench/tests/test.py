@@ -5,8 +5,12 @@ def foo(a, b):
 
 a = benchmark(["foo:foo(1, 2)"], 10, 3, globals())
 print(a)
-a = benchmark(["foo:foo(1, 2)"], 10, 3, {'foo':foo})
-print(a)
-a = benchmark(["foo:foo(1, 2)"], 10, 3, benchmark_env([foo]))
-print(a)
 a.plot()
+# a = benchmark(["foo:foo(1, 2)"], 10, 3, {'foo':foo})
+# print(a)
+# a = benchmark(["foo:foo(1, 2)"], 10, 3, benchmark_env([foo]))
+# print(a)
+# a.plot()
+
+print(benchmark_env([foo]))
+print(type([foo]))

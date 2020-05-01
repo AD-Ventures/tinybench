@@ -9,14 +9,12 @@ jobs:
   - name: "Windows"
     language: python
     os: windows
-python:
-  - "3.4"
-  - "3.8"
-  - "nightly"
-  - "pypy3"
-
-install:
-  pip3 install matplotlib
-  pip3 install .
-
-script: python3 tinybench/tests/test.py
+  python:
+    - "3.4"
+    - "3.8"
+    - "nightly"
+    - "pypy3"
+  install:
+    pip3 install matplotlib
+    pip3 install .
+  script: python3 tinybench/tests/test.py

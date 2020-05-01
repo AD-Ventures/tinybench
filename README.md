@@ -41,7 +41,7 @@ print(b)
 b.plot()
 
 # alternatively, we can benchmark using the process time instead of real time:
-b_process = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, env, True)
+b_process = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, env, process_time = True)
 
 ```
 

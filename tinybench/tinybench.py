@@ -3,7 +3,6 @@ import statistics
 import inspect
 import matplotlib.pyplot as plt
 
-
 class tinybench():
     def __init__(self, exec_times):
         self.exec_times = exec_times
@@ -108,16 +107,16 @@ def calling_scope_variable(name):
 
 
 # ['label:func(args)', ...]
-def benchmark(functions, ntimes, warmup, process_time=False):
+def benchmark(functs, ntimes, warmup, g, process_time=False):
     """
-    Benchmarks functions supplied in the first argument.
+    Benchmarks functs supplied in the first argument.
 
     This function provides support for timing and comparing runtimes
-    of various supplied functions.
+    of various supplied functs.
 
     Paramters
     ---------
-    functions : list of str
+    functs : list of str
         List of strings with strings follown the format of 'label:func(args)'
     ntimes : int
         the number of times to run each function
@@ -145,7 +144,7 @@ def benchmark(functions, ntimes, warmup, process_time=False):
     """
     f_dict = {}
 
-    for func in functions:
+    for func in functs:
         label, func, args = benchmark_parse(func)
         processed_args = []
         for arg in args:
@@ -155,11 +154,15 @@ def benchmark(functions, ntimes, warmup, process_time=False):
             else:
                 processed_args.append(eval(arg))
 
-        print(globals())
-        f_dict[label] = (globals()[func], processed_args)
+        f_dict[label] = (g[func], processed_args)
 
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
 
+def benchmark_env(functions):
+    env = {}
+    for f in functions:
+        env[f.__name__] = f
+    return env
 
 # def foo(a, b):
 #     y = 0

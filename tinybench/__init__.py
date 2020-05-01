@@ -1,5 +1,6 @@
-from .tinybench import benchmark
+from .tinybench import benchmark, benchmark_env
 
 __all__ = [
-  'benchmark'
+  'benchmark',
+  'benchmark_env'
 ]

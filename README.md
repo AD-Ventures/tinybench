@@ -11,9 +11,9 @@ pip install tinybench
 ## Usage
 
 ```python
-import tinybench
+from tinybench import benchmark, benchmark_env
 
-#create two functions example functions to test
+# create two functions example functions to test
 def foo(a):
 	test = []
 	for i in range(a):
@@ -23,11 +23,20 @@ def foo(a):
 def bar(a, b):
 	return a + b
 
-#example input variable
+# example input variable
 c = 10000
 
+iterations = 100
+warmup = 10
 
-b = tinybench.benchmark(['Display Name for Foo Test:foo(c)', 'bar(10, 15)'])
+# env should be globals(), or use benchmark_env(functions_list)
+# functions_list should at least contain all the functions to benchmark
+env = benchmark_env([foo, bar])
+
+# instead, using globals() is recommended
+env = globals()
+
+b = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, env)
 print(b)
 b.plot()
 ```

@@ -72,7 +72,6 @@ class tinybench():
         plt.show()
 
 
-# { label : (fname, [args ...]) }
 def benchmark_dict(f_dict, ntimes, warmup, process_time=False):
     exec_times = {}
 
@@ -97,18 +96,24 @@ def benchmark_dict(f_dict, ntimes, warmup, process_time=False):
 
 
 def benchmark_parse(string):
-    strip_string = string.strip()
-    label_ind = strip_string.find(":")
-    label = string
-    if label_ind != -1:
-        label = strip_string[0:label_ind]
-    func_ind = strip_string.find('(')
-    func = strip_string[label_ind + 1:func_ind]
-    new_string = strip_string[func_ind + 1:]
+    split_string = string.split(":")
+    is_labeled = False
+    if len(split_string) == 2:
+        label, rest = split_string
+        label = label.strip()
+        is_labeled = True
+    else:
+        rest = string
+    rest = rest.replace(" ", "")
+    func_ind = rest.find('(')
+    func = rest[0:func_ind]
+    new_string = rest[func_ind + 1:]
     new_string = new_string[:-1]
     args = list(map(str.strip, new_string.split(",")))
     if args == ['']:
         args = []
+    if not is_labeled:
+        label = func
     return (label, func, args)
 
 
@@ -122,7 +127,6 @@ def calling_scope_variable(name):
     return frame.f_locals[name]
 
 
-# ['label:func(args)', ...]
 def benchmark(functs, ntimes, warmup, g, process_time=False):
     """
     Benchmarks functions supplied in the first argument.
@@ -170,6 +174,7 @@ def benchmark(functs, ntimes, warmup, g, process_time=False):
         f_dict[label] = (g[func], processed_args)
 
     return benchmark_dict(f_dict, ntimes, warmup, process_time)
+
 
 def benchmark_env(functions):
     """

@@ -33,7 +33,7 @@ class TestBenchmarkEnv(unittest.TestCase):
 class TestBenchmark(unittest.TestCase):
     def test_error(self):
         with self.assertRaises(ValueError):
-            benchmark(["foo:foo(1,,2)"], 1, 0, globals())
+            benchmark(["foo : foo(1,,2)"], 1, 0, globals())
 
     def test_run_env(self):
         bench = benchmark(["bar(1)"], 2, 2, {'bar':bar})
@@ -44,7 +44,7 @@ class TestBenchmark(unittest.TestCase):
         self.assertTrue(bench.mins)
         self.assertTrue(bench.meds)
 
-        bench = benchmark(["foo:foo(1, 1)", "bar(1)"], 2, 2, {'foo':foo, 'bar':bar})
+        bench = benchmark(["foo : foo(1, 1)", "bar(1)"], 2, 2, {'foo':foo, 'bar':bar})
 
         self.assertTrue(bench.exec_times)
         self.assertTrue(bench.means)

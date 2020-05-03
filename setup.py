@@ -11,7 +11,7 @@ setuptools.setup(
     description="A microbenchmark for Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/mickyabir/tinybench",
+    url="https://github.com/AD-Ventures/tinybench",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

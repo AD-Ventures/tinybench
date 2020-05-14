@@ -45,6 +45,8 @@ b_process = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, e
 
 ```
 
+![](figure1.png)
+
 ## Support
 
 For any help or questions, please open an issue on GitHub.

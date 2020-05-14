@@ -45,7 +45,7 @@ b_process = benchmark(['Foo_Label:foo(c)', 'bar(10, 15)'], iterations, warmup, e
 
 ```
 
-<img src="sample_plot.png" width="320">
+<img src="sample_plot.png" width="640">
 
 ## Support
 

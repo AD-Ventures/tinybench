@@ -5,7 +5,7 @@ Tinybench is a lightweight package to time, compare, and visualize various funct
 ## Installation
 
 ```bash
-pip install tinybench
+pip3 install tinybench
 ```
 
 ## Usage
